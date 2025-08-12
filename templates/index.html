@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 驅動的影片內容策展平台</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; max-width: 900px; margin: auto; background-color: #f4f4f4; }
+        .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1, h2 { color: #333; }
+        form { margin-bottom: 20px; }
+        input[type="text"] { width: 70%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
+        button { padding: 10px 15px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .result-section { margin-top: 30px; }
+        .video-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .video-item { background: #fff; padding: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
+        .video-item img { max-width: 100%; border-radius: 4px; }
+        .article-list { list-style: none; padding: 0; }
+        .article-list li { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .article-list li a { font-weight: bold; color: #007bff; text-decoration: none; }
+        .article-list li a:hover { text-decoration: underline; }
+        pre { background: #f0f0f0; padding: 15px; border-left: 5px solid #007bff; white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI 內容策展平台</h1>
+        <p>請輸入一個您感興趣的主題，我們將為您整合相關的學習大綱、影片和文章。</p>
+
+        <form method="POST">
+            <input type="text" name="topic" placeholder="例如：Python 網頁開發" required>
+            <button type="submit">開始策展</button>
+        </form>
+
+        {% if topic %}
+            <div class="result-section">
+                <h2>「{{ topic }}」的學習資源</h2>
+                <hr>
+
+                <h3>AI 學習大綱</h3>
+                <pre>{{ outline | safe }}</pre>
+                <hr>
+
+                <h3>推薦影片</h3>
+                {% if videos %}
+                    <div class="video-list">
+                        {% for video in videos %}
+                        <div class="video-item">
+                            <a href="https://www.youtube.com/watch?v={{ video.video_id }}" target="_blank">
+                                <img src="{{ video.thumbnail }}" alt="{{ video.title }}">
+                                <p>{{ video.title }}</p>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>找不到相關影片。</p>
+                {% endif %}
+                <hr>
+
+                <h3>相關文章</h3>
+                {% if articles %}
+                    <ul class="article-list">
+                        {% for article in articles %}
+                        <li>
+                            <a href="{{ article.link }}" target="_blank">{{ article.title }}</a>
+                            <p>{{ article.snippet }}</p>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>找不到相關文章。</p>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
